@@ -109,17 +109,20 @@ public class ClassLoaderWrapper {
    * @return the resource or null
    */
   InputStream getResourceAsStream(String resource, ClassLoader[] classLoader) {
+	  // 循环classLoader 通过指定或者默认ClassLoader来读取配置文件
     for (ClassLoader cl : classLoader) {
       if (null != cl) {
 
         // try to find the resource as passed
+    	//根据resource 读取该路径下的配置文件 
         InputStream returnValue = cl.getResourceAsStream(resource);
 
         // now, some class loaders want this leading "/", so we'll add it and try again if we didn't find the resource
+        // 如果在该路径下没有读取到配置文件、在路径前添加’/’ 在此尝试读取
         if (null == returnValue) {
           returnValue = cl.getResourceAsStream("/" + resource);
         }
-
+        // 如果读取到配置文件、循环结束
         if (null != returnValue) {
           return returnValue;
         }
@@ -203,10 +206,15 @@ public class ClassLoaderWrapper {
 
   ClassLoader[] getClassLoaders(ClassLoader classLoader) {
     return new ClassLoader[]{
+    	//指定的类加载器
         classLoader,
+        //系统默认的类加载器
         defaultClassLoader,
+        //当前线类加载器
         Thread.currentThread().getContextClassLoader(),
+        //当前类使用的加载器
         getClass().getClassLoader(),
+        // App classLoader
         systemClassLoader};
   }
 

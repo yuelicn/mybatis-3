@@ -109,6 +109,8 @@ public class Resources {
    * @throws java.io.IOException If the resource cannot be found or read
    */
   public static InputStream getResourceAsStream(ClassLoader loader, String resource) throws IOException {
+	  //读取配置文件：解析成inputStream 
+	  // 使用了 ClassLoaderWrapper类来读取配置文件
     InputStream in = classLoaderWrapper.getResourceAsStream(resource, loader);
     if (in == null) {
       throw new IOException("Could not find resource " + resource);
@@ -156,6 +158,7 @@ public class Resources {
    */
   public static Reader getResourceAsReader(String resource) throws IOException {
     Reader reader;
+    // 读取配置文件，并将文件流封装成Reader
     if (charset == null) {
       reader = new InputStreamReader(getResourceAsStream(resource));
     } else {

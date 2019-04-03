@@ -46,6 +46,9 @@ public class SqlSessionFactoryBuilder {
 
   public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
     try {
+      // 构建XMLConfigBuilder对象来解析XMl
+      // 这个使用委托模型，将解析xml具体动作委托给XMLConfigBuilder对象来完成
+      // 创建XMLConfigBuilder 对象时有个重要的动作就是初始化Configuration对象
       XMLConfigBuilder parser = new XMLConfigBuilder(reader, environment, properties);
       return build(parser.parse());
     } catch (Exception e) {
